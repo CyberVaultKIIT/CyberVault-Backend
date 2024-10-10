@@ -1,7 +1,30 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-exports.createUser = async (req, res) => {
-  const newUser = new User(req.body);
+
+// Register a new user
+exports.registerUser = async (req, res) => {
+  const { name, email, password } = req.body;
+  
   try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new user
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // Save the user to the database
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (err) {
@@ -9,54 +32,46 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Get all users
-exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
+// Login a user
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-// Get a user by ID
-exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    // Check if the user exists
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(user);
+
+    // Check if the password matches
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ token, user });
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
-// Update a user by ID
-exports.updateUser = async (req, res) => {
-  try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // Return the updated document
-      runValidators: true, // Ensure schema validation during update
-    });
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json(updatedUser);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
+// Middleware to protect routes
+exports.protect = async (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', '');
 
-// Delete a user by ID
-exports.deleteUser = async (req, res) => {
+  if (!token) {
+    return res.status(401).json({ message: 'No token, authorization denied' });
+  }
+
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json({ message: "User deleted successfully" });
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded.id;
+    next();
   } catch (err) {
-    res.status(500).json(err);
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };
