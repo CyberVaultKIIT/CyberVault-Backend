@@ -5,6 +5,7 @@ const teamRoutes = require('./routes/teamRoutes');
 const config = require('./config/config');
 const app = express();
 const connectDB = require('./config/db');
+require('dotenv').config();
 // Middleware
 app.use(express.json());
 
