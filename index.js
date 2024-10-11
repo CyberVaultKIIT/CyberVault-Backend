@@ -1,24 +1,31 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const formRoutes = require('./routes/formRoutes');
-const teamRoutes = require('./routes/teamRoutes');
-const config = require('./config/config');
+const Logger = require('./utils/Logger')
 const app = express();
 const connectDB = require('./config/db');
-// Middleware
+
+require('dotenv').config();
 app.use(express.json());
-
 connectDB();
-// Routes
-app.get('/',(req,res,next)=>{
-    console.log(req.header);
-    res.send("Welcome to Cyber Vault!!")
-})
-app.use('/api/forms', formRoutes);
-app.use('/api/teams', teamRoutes);
 
-// Start the server
 const PORT = process.env.PORT || 5000;
+
+Logger.log("log");
+Logger.debug("debug");
+Logger.error("error");
+Logger.debugError("error debub");
+
+app.route('/api','./routes/api');
+
+app.get('/',(req,res)=>{
+  res.status(200).json({message:"server is running"})
+  Logger.debug("Server is running on port")
+})
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  Logger.log(`Server is running on port ${PORT}`);
 });
+
+
+
+// docker build -t cv/backend:latest .
+// docker run --env-file .env -p 3000:3000 cv/backend
