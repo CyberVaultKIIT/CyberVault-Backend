@@ -1,7 +1,5 @@
-Here’s a sample `README.md` file for your project. You can modify it to fit any specific requirements or additional details you want to include.
-
 ```markdown
-# CV Backend
+# Cyber Vault Backend
 
 This is the backend service for the CyberVault application, designed to handle requests and manage data effectively. It utilizes Node.js and Express, along with other modern libraries and frameworks.
 
@@ -47,6 +45,10 @@ To set up the project locally, follow these steps:
 4. Run the Docker container:
    ```bash
    docker run --env-file .env -p 3000:3000 cv/backend
+   ```
+5. Alternatively you can run using
+   ```bash
+   npm run dev
    ```
 
 ## Usage
