@@ -82,7 +82,7 @@ The Logger class is used for logging messages throughout the application. Here's
 
 ## API Documentation
 
-For detailed information on the API endpoints, request/response formats, and usage examples, refer to the [API Documentation](API_DOC_LINK).
+For detailed information on the API endpoints, request/response formats, and usage examples, refer to the [[API Documentation](API_DOC_LINK)]([url](https://docs.google.com/document/d/1-ybw_1Ciuhcz2zC_NoweZPWr9UTFmmJBBtxPV1Fpg7M/edit?usp=sharing)).
 
 ## Contributing
 
