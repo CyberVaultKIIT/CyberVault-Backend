@@ -9,16 +9,12 @@ connectDB();
 
 const PORT = process.env.PORT || 5000;
 
-Logger.log("log");
-Logger.debug("debug");
-Logger.error("error");
-Logger.debugError("error debub");
 
-app.route('/api','./routes/api');
+app.use('/api', require('./routes/api'));
 
 app.get('/',(req,res)=>{
   res.status(200).json({message:"server is running"})
-  Logger.debug("Server is running on port")
+  Logger.debug("Server is running on port");
 })
 
 app.listen(PORT, () => {
