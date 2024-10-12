@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
+
+
 const RegistrationSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  year: { type: String, required: true },
-  whatsapp_number: { type: String, required: true }
-}, {
+  //formId: { type: mongoose.Schema.Types.ObjectId, ref: 'Form', required: true },
+  responseData: { type: Map, of: String, required: true }, // Example: storing dynamic key-value pairs of form answers
+  created_at: { type: Date, default: Date.now }
+},{
   timestamps: true // Enable timestamps
 });
 

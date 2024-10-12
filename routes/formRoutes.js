@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const formController = require('../controllers/formController');
+const registrationController = require('../controllers/registrationController');
 
-router.post('/', formController.createForm);
+router.post('/saveResponse', registrationController.saveResponse);
 
 // Additional routes can be added here
 
