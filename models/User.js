@@ -1,75 +1,60 @@
 const mongoose = require('mongoose')
 
-// Defining the User schema
 const UserSchema = new mongoose.Schema({
   User_id: {
-    // Primary Key (PK) for the user
     type: String,
-    required: true, // The field is mandatory
+    required: true,
   },
   Name: {
-    // User's name
     type: String,
-    required: true, // The field is mandatory
+    required: true,
   },
   Email: {
-    // Unique constraint (U) for user's email
     type: String,
-    required: true, // The field is mandatory
+    required: true,
   },
   Password_hash: {
-    // Hashed password for security
     type: String,
-    required: true, // The field is mandatory
+    required: true,
   },
   Phone_number: {
-    // Unique constraint (U) for user's phone number
     type: Number,
   },
   Branch: {
-    // User's branch of study or department
     type: String,
   },
   Roll: {
-    // Roll number of the student
     type: Number,
-    required: true, // The field is mandatory
+    required: true,
   },
   Batch: {
-    // Batch number the user belongs to
     type: Number,
   },
   Year: {
-    // Year of study or year of graduation
     type: Number,
   },
   Created_at: {
-    // Timestamp for user creation
     type: Date,
-    default: Date.now, // Sets the default to the current date
-    required: true, // The field is mandatory
+    default: Date.now,
+    required: true,
   },
   Updated_at: {
-    // Timestamp for user data updates
     type: Date,
-    default: Date.now, // Sets the default to the current date
-    required: true, // The field is mandatory
+    default: Date.now,
+    required: true,
   },
   social_links: [
-    // Array to store social media links
     {
       type: {
-        type: String, // Type of social link (e.g., LinkedIn, GitHub)
-        required: true, // The field is mandatory
+        type: String,
+        required: true,
       },
-      url: { type: String, required: true }, // URL of the social link
+      url: { type: String, required: true },
     },
   ],
-  optional: { type: mongoose.Schema.Types.Mixed }, // Flexible field that can store any data type (e.g., additional info)
+  optional: { type: mongoose.Schema.Types.Mixed },
 })
 
-// Create a Mongoose model using the schema
 const User = mongoose.model('User', UserSchema)
 
-// Export the User model for use in other parts of the application
 module.exports = User
