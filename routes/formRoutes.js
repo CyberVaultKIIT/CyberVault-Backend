@@ -3,7 +3,7 @@ const router = express.Router();
 const registrationController = require('../controllers/registrationController');
 
 
-router.post('/saveResponse', registrationController.saveResponse);
+router.post('/saveResponse', verifyToken(), registrationController.saveResponse);
 
 // Additional routes can be added here
 
