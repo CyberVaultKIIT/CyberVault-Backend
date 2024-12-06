@@ -1,9 +1,34 @@
 const mongoose = require('mongoose');
 
-const FormSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  created_at: { type: Date, default: Date.now },
+const formSchema = new mongoose.Schema({
+  Form_id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  Info_object: {
+    type: mongoose.Schema.Types.Mixed, 
+    required: true,
+  },
+  Controller_object: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true, 
+  },
+  Topic_object: {
+    type: Object, 
+  },
+  Sections: {
+    type: [mongoose.Schema.Types.Mixed],
+    required: true, 
+  },
+  requiredSection:{
+    type: [mongoose.Schema.Types.Mixed],
+  },
+  Optional: {
+    type: mongoose.Schema.Types.Mixed, 
+  },
 });
 
-module.exports = mongoose.model('Form', FormSchema);
+const Form = mongoose.model('Form', formSchema);
+
+module.exports = Form;
