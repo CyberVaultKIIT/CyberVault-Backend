@@ -1,33 +1,27 @@
-const Registration = require('../models/Registration'); // Assuming the Response model is saved here
-const Form = require('../models/Form');         // Import the Form model
-const { json } = require('express');
+const Registration = require('../models/Registration'); 
+const Logger = require('../utils/Logger');
 
 const saveResponse = async (req, res) => {
-  console.log("Entering this function")
-  const { formId } = req.body;
-  const responseData=json.parse(resquest.body.responseData)
-  try {
-    // Ensure the form exists before saving the response
-    // const formExists = await Form.findById(formId);
-    /*if (!formExists) {
-      return res.status(404).json({ error: 'Form not found' });
-    }*/
+  // console.log("Entering saveResponse function");
 
-    // Create a new response tied to the form
+  const { responseData } = req.body;
+  try {
+    // Create a new response (no need for formId)
     const newResponse = new Registration({
-      formId,
-      responseData
+      responseData     // Save the form's response data
     });
 
     const savedResponse = await newResponse.save();
-    console.log("Resoponse saved successfully",savedResponse)
+    Logger.log("Response saved successfully:\n", savedResponse);
     res.status(201).json(savedResponse);
+
   } catch (err) {
     if (err.name === 'ValidationError') {
       res.status(400).json({ error: err.message });
     } else {
       res.status(500).json({ error: 'Failed to save response', details: err.message });
-    }
-  }
+    }
+  }
 };
-module.exports={saveResponse}
+
+module.exports = { saveResponse };
