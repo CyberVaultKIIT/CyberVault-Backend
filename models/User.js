@@ -1,50 +1,49 @@
 const mongoose = require('mongoose')
 
-// Define User Schema
 const UserSchema = new mongoose.Schema({
-  User_id: {
+  userId: {
     type: String,
     required: true,
   },
-  Name: {
+  name: {
     type: String,
     required: true,
   },
-  Email: {
+  email: {
     type: String,
     required: true,
   },
-  Password_hash: {
+  passwordHash: {
     type: String,
     required: true,
   },
-  Phone_number: {
+  phoneNumber: {
     type: Number,
   },
-  Branch: {
+  branch: {
     type: String,
   },
-  Roll: {
+  roll: {
     type: Number,
     required: true,
   },
-  Batch: {
+  batch: {
     type: Number,
   },
-  Year: {
+  year: {
     type: Number,
   },
-  Created_at: {
+  createdAt: {
     type: Date,
     default: Date.now,
     required: true,
   },
-  Updated_at: {
+  updatedAt: {
     type: Date,
     default: Date.now,
     required: true,
   },
-  social_links: [
+  socialLinks: [
     {
       type: {
         type: String,
