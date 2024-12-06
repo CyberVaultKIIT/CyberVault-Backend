@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
+    unique: true,
   },
   name: {
     type: String,
@@ -12,6 +13,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   passwordHash: {
     type: String,
@@ -19,6 +21,7 @@ const UserSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
+    unique: true,
   },
   branch: {
     type: String,
