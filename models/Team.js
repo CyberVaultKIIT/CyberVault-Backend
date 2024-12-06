@@ -1,43 +1,43 @@
 const mongoose = require('mongoose');
 
 const TeamSchema = new mongoose.Schema({
-  ID: {
+  id: {
     type: String,
     required: true,
-    unique: true, // PK
+    unique: true,
   },
-  Team_code: {
+  teamCode: {
     type: String,
     required: true,
-    unique: true, // Unique constraint
+    unique: true,
   },
-  Team_name: {
+  teamName: {
     type: String,
     required: true,
-    unique: true, // Unique constraint
+    unique: true,
   },
-  TeamLeadId: {
+  teamLeadId: {
     type: String,
     required: false,
   },
-  Form_id: {
+  formId: {
     type: String,
     required: true,
-    unique: true, // Unique constraint and FK
+    unique: true,
   },
-  Team_size: {
+  teamSize: {
     type: Number,
     required: false,
   },
-  CreatedOn: {
+  createdAt: {
     type: Date,
-    default: Date.now, // Automatically set the creation date
+    default: Date.now, 
   },
-  UpdatedOn: {
+  updatedAt: {
     type: Date,
-    default: Date.now, // Automatically update when modified
+    default: Date.now,
   },
-  Optional: {
+  optional: {
     type: mongoose.Schema.Types.Mixed, // Can hold any type of value
     required: false,
   },
