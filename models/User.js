@@ -22,7 +22,6 @@ const UserSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     unique: true,
-    sparse: true,
   },
   branch: {
     type: String,
