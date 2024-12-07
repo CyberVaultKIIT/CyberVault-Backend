@@ -40,11 +40,9 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    // Save the old user document (except for the password)
     const oldUserDoc = { ...user.toObject() }
     delete oldUserDoc.passwordHash
 
-    // Prepare the history entry to push to the user's history
     const historyEntry = {
       timestamp: new Date(),
       document: oldUserDoc,
