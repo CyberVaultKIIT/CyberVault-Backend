@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     unique: true,
+    sparse: true,
   },
   branch: {
     type: String,
@@ -29,6 +30,7 @@ const UserSchema = new mongoose.Schema({
   roll: {
     type: Number,
     required: true,
+    unique: true,
   },
   batch: {
     type: Number,
@@ -36,6 +38,39 @@ const UserSchema = new mongoose.Schema({
   year: {
     type: Number,
   },
+  role: {
+    type: String,
+    enum: [
+      'admin',
+      'web',
+      'leadWeb',
+      'eventManagement',
+      'leadEventManagement',
+      'coreCyber',
+      'leadCoreCyber',
+      'contentCreation',
+      'leadContentCreation',
+      'marketing',
+      'leadMarketing',
+      'broadcasting',
+      'leadBroadcasting',
+      'designing',
+      'leadDesigning',
+      'user',
+    ],
+    default: 'user',
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'suspended'],
+    default: 'active',
+  },
+  history: [
+    {
+      timestamp: { type: Date, default: Date.now },
+      document: { type: Object, required: true },
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
