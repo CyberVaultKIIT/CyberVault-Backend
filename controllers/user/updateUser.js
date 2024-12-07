@@ -20,13 +20,18 @@ const updateUser = async (req, res) => {
       'leadDesigning',
     ]
 
-    if (user.status !== 'active' || !allowedRoles.includes(user.role)) {
+    const currentUser = req.user
+
+    if (
+      currentUser.status !== 'active' ||
+      !allowedRoles.includes(currentUser.role)
+    ) {
       return res.status(403).json({
-        message: 'Access denied. You do not have permission to create users.',
+        message: 'Access denied. You do not have permission to update users.',
       })
     }
 
-    const { userId } = req.params
+    const userId = req.params.id
     const updateData = req.body
 
     const user = await User.findOne({ userId })
@@ -35,9 +40,11 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' })
     }
 
+    // Save the old user document (except for the password)
     const oldUserDoc = { ...user.toObject() }
     delete oldUserDoc.passwordHash
 
+    // Prepare the history entry to push to the user's history
     const historyEntry = {
       timestamp: new Date(),
       document: oldUserDoc,
@@ -46,10 +53,16 @@ const updateUser = async (req, res) => {
     user.history.push(historyEntry)
 
     Object.keys(updateData).forEach((key) => {
-      if (key !== 'passwordHash') {
+      if (key !== 'passwordHash' && key !== 'createdAt') {
         user[key] = updateData[key]
       }
     })
+
+    if (updateData.createdAt) {
+      user.createdAt = user.createdAt
+    }
+
+    user.updatedAt = new Date()
 
     await user.save()
 
