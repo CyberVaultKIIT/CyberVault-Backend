@@ -6,13 +6,13 @@ const Form = require('../../models/Form');
 const updateForm = async (req, res) => {
 
   try {
-    const { formId, Info_object, Controller_object, Topic_object, Sections, requiredSection, Optional } = req.body;
+    const { formId, InfoObject, Controller_object, Topic_object, Sections, requiredSection, Optional } = req.body;
 
     
     const updatedForm = await Form.findOneAndUpdate(
       { _id: formId },
       {
-        Info_object,
+        InfoObject,
         Controller_object,
         Topic_object,
         Sections,

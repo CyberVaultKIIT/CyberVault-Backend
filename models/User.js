@@ -1,50 +1,86 @@
 const mongoose = require('mongoose')
 
-// Define User Schema
 const UserSchema = new mongoose.Schema({
-  User_id: {
+  userId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  name: {
     type: String,
     required: true,
   },
-  Name: {
+  email: {
     type: String,
     required: true,
   },
-  Email: {
+  passwordHash: {
     type: String,
     required: true,
   },
-  Password_hash: {
-    type: String,
-    required: true,
-  },
-  Phone_number: {
-    type: Number,
-  },
-  Branch: {
-    type: String,
-  },
-  Roll: {
+  phoneNumber: {
     type: Number,
     required: true,
+    unique: true,
   },
-  Batch: {
+  branch: {
+    type: String,
+  },
+  roll: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  batch: {
     type: Number,
   },
-  Year: {
+  year: {
     type: Number,
   },
-  Created_at: {
+  role: {
+    type: String,
+    enum: [
+      'admin',
+      'web',
+      'leadWeb',
+      'eventManagement',
+      'leadEventManagement',
+      'coreCyber',
+      'leadCoreCyber',
+      'contentCreation',
+      'leadContentCreation',
+      'marketing',
+      'leadMarketing',
+      'broadcasting',
+      'leadBroadcasting',
+      'designing',
+      'leadDesigning',
+      'user',
+    ],
+    default: 'user',
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'suspended'],
+    default: 'active',
+  },
+  history: [
+    {
+      timestamp: { type: Date, default: Date.now },
+      document: { type: Object, required: true },
+    },
+  ],
+  createdAt: {
     type: Date,
     default: Date.now,
     required: true,
   },
-  Updated_at: {
+  updatedAt: {
     type: Date,
     default: Date.now,
     required: true,
   },
-  social_links: [
+  socialLinks: [
     {
       type: {
         type: String,
