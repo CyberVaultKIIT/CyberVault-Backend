@@ -1,31 +1,27 @@
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   infoObject: {
     type: mongoose.Schema.Types.Mixed, 
     required: true,
   },
-  Controller_object: {
+  controllerObject: {
     type: mongoose.Schema.Types.Mixed,
     required: true, 
   },
-  Topic_object: {
+  topicObject: {
     type: Object, 
   },
-  Sections: {
+  sections: {
     type: [mongoose.Schema.Types.Mixed],
     required: true, 
   },
   requiredSection:{
     type: [mongoose.Schema.Types.Mixed],
   },
-  Optional: {
-    type: mongoose.Schema.Types.Mixed, 
+  optional: {
+    type: mongoose.Schema.Types.Mixed,
+    default: null 
   },
 });
 
