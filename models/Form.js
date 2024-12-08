@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const formSchema = new mongoose.Schema({
-  Form_id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   Info_object: {
     type: mongoose.Schema.Types.Mixed, 
     required: true,
@@ -25,7 +20,8 @@ const formSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.Mixed],
   },
   Optional: {
-    type: mongoose.Schema.Types.Mixed, 
+    type: mongoose.Schema.Types.Mixed,
+    default: null 
   },
 });
 
