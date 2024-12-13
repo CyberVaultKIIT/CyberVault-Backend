@@ -71,7 +71,6 @@ const changeUserStatus = async (req, res) => {
       .status(200)
       .json({ message: 'User status updated successfully', data: user })
   } catch (error) {
-    console.error(error)
     return res
       .status(500)
       .json({ message: 'Error changing user status', error: error.message })
