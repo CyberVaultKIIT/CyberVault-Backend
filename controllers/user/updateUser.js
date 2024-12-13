@@ -68,7 +68,6 @@ const updateUser = async (req, res) => {
       .status(200)
       .json({ message: 'User updated successfully', data: user })
   } catch (error) {
-    console.error(error)
     return res
       .status(500)
       .json({ message: 'Error updating user', error: error.message })
