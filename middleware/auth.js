@@ -16,7 +16,9 @@ const verifyToken = async (req, res, next) => {
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
 
-    const user = await User.findOne({ userId: decodedToken.userId })
+    const user = await User.findOne({ userId: decodedToken.userId }).select(
+      '-passwordHash',
+    )
 
     if (!user) {
       return res.status(404).json({ message: 'User not found.' })
@@ -28,12 +30,7 @@ const verifyToken = async (req, res, next) => {
         .json({ message: 'Your account is inactive or suspended.' })
     }
 
-    req.user = {
-      userId: user.userId,
-      email: user.email,
-      role: user.role,
-      status: user.status,
-    }
+    req.user = user
 
     next()
   } catch (error) {
