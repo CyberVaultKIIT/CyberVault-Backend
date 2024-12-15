@@ -4,7 +4,7 @@
   "description": "This is the backend service for the Cyber Vault Scoiety.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
@@ -26,5 +26,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.0",
     "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
