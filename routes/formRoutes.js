@@ -8,8 +8,8 @@ const {deleteForm}=require('../controllers/Form/deleteFormController.js')
 const {updateForm}=require('../controllers/Form/updateFormController.js')
 
 //router.post('/saveResponse', registrationController.saveResponse);
-router.use(verifyToken)
-router.post('/createForm', checkAccess('admin'), createForm) 
+router.use(verifyToken, checkAccess('admin'))
+router.post('/createForm',  createForm) 
 router.delete('/deleteForm', deleteForm)
 router.put('/updateForm', updateForm)
 // Additional routes can be added here

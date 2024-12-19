@@ -2,7 +2,7 @@ const Registration = require('../models/Registration');
 const Logger = require('../utils/Logger');
 
 const saveResponse = async (req, res) => {
-  // console.log("Entering saveResponse function");
+ 
 
   const { responseData } = req.body;
   try {

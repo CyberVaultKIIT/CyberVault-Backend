@@ -4,14 +4,10 @@ const jwt = require('jsonwebtoken')
 const User = require('../../../models/User')
 
 const loginUser = async (req, res) => {
-  const { name, email, roll, password, confirmPassword } = req.body
+  const { email, password } = req.body
 
-  if (!name || !email || !roll || !password || !confirmPassword) {
+  if (!email || !password ) {
     return res.status(400).json({ message: 'Please fill in all fields' })
-  }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: 'Passwords do not match' })
   }
 
   try {
@@ -19,7 +15,6 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).send({ message: 'No user Found' })
     }
-
     const userPassword = user.passwordHash
     const isValidPassword = await bcrypt.compare(password, userPassword)
 
@@ -32,7 +27,7 @@ const loginUser = async (req, res) => {
       process.env.JWT_SECRET_KEY,
       { expiresIn: '1h' },
     )
-
+    user.passwordHash= undefined;
     res.status(200).send({
       message: 'User Logged In Successfully',
       data: user,
