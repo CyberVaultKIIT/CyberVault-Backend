@@ -48,7 +48,7 @@ const changeUserStatus = async (req, res) => {
     }
 
     const oldUserDoc = { ...user.toObject() }
-    delete oldUserDoc.passwordHash
+    delete oldUserDoc.password
 
     const historyEntry = {
       timestamp: new Date(),

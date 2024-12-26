@@ -6,7 +6,7 @@ const {verifyToken} = require('../middleware/verifyToken')
 const router = express.Router()
 router.use(verifyToken)
 router.post('/create-user', createUser)
-router.patch('/update-user/:id', updateUser)
-router.patch('/change-user-access/:id', changeUserStatus)
+router.post('/update-user', updateUser)
+router.post('/change-user-access', changeUserStatus)
 
 module.exports = router

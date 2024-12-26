@@ -4,7 +4,7 @@ const User = require('../models/User')
 
 const verifyToken= async(req, res, next) => {
   try {
-    const authHeader = req.headers.authorization
+    const authHeader = req.headers.authorization || req.cookie.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res
@@ -16,7 +16,7 @@ const verifyToken= async(req, res, next) => {
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY)
 
-    const user = await User.findOne({ userId: decodedToken.userId })
+    const user = await User.findOne({ email: decodedToken.email })
 
     if (!user) {
       return res.status(404).json({ message: 'User not found.' })
