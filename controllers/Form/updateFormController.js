@@ -6,13 +6,13 @@ const Form = require('../../models/Form');
 const updateForm = async (req, res) => {
 
   try {
-    const { formId, InfoObject, Controller_object, Topic_object, Sections, requiredSection, Optional } = req.body;
+    const { formId, infoObject, Controller_object, Topic_object, Sections, requiredSection, Optional } = req.body;
 
     
     const updatedForm = await Form.findOneAndUpdate(
       { _id: formId },
       {
-        InfoObject,
+        infoObject,
         Controller_object,
         Topic_object,
         Sections,
@@ -25,6 +25,7 @@ const updateForm = async (req, res) => {
     if (!updatedForm) {
       return res.status(404).json({ message: 'Form not found' });
     }
+    console.log("updated bit: ", infoObject);
 
     res.status(200).json({ message: 'Form updated successfully', form: updatedForm });
   } catch (error) {

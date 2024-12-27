@@ -1,12 +1,12 @@
 const express = require('express')
-const { createUser } = require('../controllers/user/createUser')
-const { updateUser } = require('../controllers/user/updateUser')
-const { changeUserStatus } = require('../controllers/user/changeUserStatus')
+const { createUser, updateUser, deleteUser } = require('../controllers/user')
+// const { updateUser } = require('../controllers/user/updateUser')
+// const { deleteUser } = require('../controllers/user/deleteUser')
 const {verifyToken} = require('../middleware/verifyToken')
 const router = express.Router()
 router.use(verifyToken)
 router.post('/create-user', createUser)
 router.post('/update-user', updateUser)
-router.post('/change-user-access', changeUserStatus)
+router.post('/delete-user', deleteUser)
 
 module.exports = router

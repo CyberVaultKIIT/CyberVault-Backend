@@ -15,6 +15,10 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).send({ message: 'No user Found' })
     }
+
+    if(user.status == "suspended"){
+      return res.status(401).json({ message: 'Your account has been suspended.' })
+    }
     const userPassword = user.password
     const isValidPassword = await bcrypt.compare(password, userPassword)
 
@@ -25,7 +29,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       { email: user.email },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: '1h' },
+      { expiresIn: '10h' },
     )
     user.password= undefined;
     user.phoneNumber= undefined;
