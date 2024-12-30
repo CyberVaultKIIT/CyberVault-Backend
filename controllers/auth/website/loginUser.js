@@ -4,14 +4,10 @@ const jwt = require('jsonwebtoken')
 const User = require('../../../models/User')
 
 const loginUser = async (req, res) => {
-  const { name, email, roll, password, confirmPassword } = req.body
+  const { email, password } = req.body
 
-  if (!name || !email || !roll || !password || !confirmPassword) {
+  if (!email || !password ) {
     return res.status(400).json({ message: 'Please fill in all fields' })
-  }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: 'Passwords do not match' })
   }
 
   try {
@@ -20,7 +16,10 @@ const loginUser = async (req, res) => {
       return res.status(404).send({ message: 'No user Found' })
     }
 
-    const userPassword = user.passwordHash
+    if(user.status == "suspended"){
+      return res.status(401).json({ message: 'Your account has been suspended.' })
+    }
+    const userPassword = user.password
     const isValidPassword = await bcrypt.compare(password, userPassword)
 
     if (!isValidPassword) {
@@ -28,17 +27,27 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user.userId, email: user.email },
+      { email: user.email },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: '1h' },
+      { expiresIn: '10h' },
     )
+    user.password= undefined;
+    user.phoneNumber= undefined;
 
-    res.status(200).send({
+    res.cookie('Authorization', token, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600000,
+    })
+
+    return res.status(200).send({
       message: 'User Logged In Successfully',
       data: user,
       token: token,
     })
-  } catch (error) {
+  } 
+  
+  catch (error) {
     return res
       .status(500)
       .json({ message: 'Error finding user', error: error.message })

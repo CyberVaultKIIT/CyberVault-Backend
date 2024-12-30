@@ -1,12 +1,12 @@
 const express = require('express')
-const { createUser } = require('../controllers/user/createUser')
-const { updateUser } = require('../controllers/user/updateUser')
-const { changeUserStatus } = require('../controllers/user/changeUserStatus')
-const auth = require('../middleware/auth')
+const { createUser, updateUser, deleteUser } = require('../controllers/user')
+// const { updateUser } = require('../controllers/user/updateUser')
+// const { deleteUser } = require('../controllers/user/deleteUser')
+const {verifyToken} = require('../middleware/verifyToken')
 const router = express.Router()
-
-router.post('/create-user', auth, createUser)
-router.patch('/update-user/:id', auth, updateUser)
-router.patch('/change-user-access/:id', auth, changeUserStatus)
+router.use(verifyToken)
+router.post('/create-user', createUser)
+router.post('/update-user', updateUser)
+router.post('/delete-user', deleteUser)
 
 module.exports = router

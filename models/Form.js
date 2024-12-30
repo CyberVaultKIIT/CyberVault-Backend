@@ -10,7 +10,7 @@ const formSchema = new mongoose.Schema({
     required: true, 
   },
   topicObject: {
-    type: Object, 
+    type: mongoose.Schema.Types.Mixed, 
   },
   sections: {
     type: [mongoose.Schema.Types.Mixed],

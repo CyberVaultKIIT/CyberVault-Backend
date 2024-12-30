@@ -3,18 +3,17 @@ const Form = require('../../models/Form');
 
 
 const createForm = async (req, res) => {
-
   try {
-    const { InfoObject, Controller_object, Topic_object, Sections, requiredSection, Optional } = req.body;
+    const { infoObject, controllerObject, topicObject, sections, requiredSection, optional } = req.body;
 
     
     const newForm = new Form({
-      InfoObject,
-      Controller_object,
-      Topic_object,
-      Sections,
+      infoObject,
+      controllerObject,
+      topicObject,
+      sections,
       requiredSection,
-      Optional,
+      optional,
     });
 
   
