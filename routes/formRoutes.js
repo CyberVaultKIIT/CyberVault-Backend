@@ -6,7 +6,9 @@ const {verifyToken}= require('../middleware/verifyToken.js')
 const {createForm}=require('../controllers/Form/createFormController.js')
 const {deleteForm}=require('../controllers/Form/deleteFormController.js')
 const {updateForm}=require('../controllers/Form/updateFormController.js')
+const {getLiveForm}=require('../controllers/Form/liveFormContoller.js')
 
+router.get('/getLiveForm', getLiveForm)
 //router.post('/saveResponse', registrationController.saveResponse);
 router.use(verifyToken, checkAccess('admin'))
 router.post('/createForm',  createForm) 
