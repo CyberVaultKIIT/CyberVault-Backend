@@ -24,4 +24,17 @@ const saveResponse = async (req, res) => {
   }
 };
 
-module.exports = { saveResponse };
+
+const getForm = async (req, res) => {
+  const { formId } = req.params;
+  try {
+      res.status(200).json({ message: `Form Fetched Successfully with ${formId}`, form: {} });
+  }
+  catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error Fetching form', error });
+  }
+};
+
+
+module.exports = { saveResponse,getForm };
