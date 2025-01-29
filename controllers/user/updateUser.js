@@ -1,4 +1,4 @@
-const User = require('../../models/User')
+const User = require('../../models/User');
 
 const updateUser = async (req, res) => {
   try {
@@ -18,61 +18,62 @@ const updateUser = async (req, res) => {
       'leadBroadcasting',
       'designing',
       'leadDesigning',
-    ]
+    ];
 
-    const currentUser = req.user
+    const currentUser = req.user;
 
+    // Check user permission
     if (
       currentUser.status !== 'active' ||
       !allowedRoles.includes(currentUser.role)
     ) {
       return res.status(403).json({
         message: 'Access denied. You do not have permission to update users.',
-      })
+      });
     }
 
-    const userId = req.params.id
-    const updateData = req.body
+    // Extract and validate data
+    const { email, password, ...updateData } = req.body;
 
-    const user = await User.findOne({ userId })
-
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    const oldUserDoc = { ...user.toObject() }
-    delete oldUserDoc.passwordHash
-
-    const historyEntry = {
+    // Save old user document for history
+    const oldUserDoc = { ...user.toObject() };
+    const historyEntry = user.history || [];
+    historyEntry.push({
       timestamp: new Date(),
       document: oldUserDoc,
-    }
+    });
 
-    user.history.push(historyEntry)
-
-    Object.keys(updateData).forEach((key) => {
-      if (key !== 'passwordHash' && key !== 'createdAt') {
-        user[key] = updateData[key]
+    // Update user using updateOne
+    const result = await User.updateOne(
+      { email }, // Filter by email
+      {
+        $set: {
+          ...updateData,
+          history: historyEntry,
+          updatedAt: new Date(),
+        },
       }
-    })
+    );
 
-    if (updateData.createdAt) {
-      user.createdAt = user.createdAt
+    if (result.nModified === 0) {
+      return res.status(400).json({ message: 'No changes made to the user.' });
     }
 
-    user.updatedAt = new Date()
-
-    await user.save()
-
+    // Respond with success
     return res
       .status(200)
-      .json({ message: 'User updated successfully', data: user })
+      .json({ message: 'User updated successfully', data: result });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return res
       .status(500)
-      .json({ message: 'Error updating user', error: error.message })
+      .json({ message: 'Error updating user', error: error.message });
   }
-}
+};
 
-module.exports = { updateUser }
+module.exports = { updateUser };

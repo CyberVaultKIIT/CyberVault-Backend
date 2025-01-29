@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   name: {
     type: String,
     required: true,
@@ -14,20 +9,19 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  passwordHash: {
+  password: {
     type: String,
     required: true,
   },
   phoneNumber: {
     type: Number,
     required: true,
-    unique: true,
   },
   branch: {
     type: String,
   },
   roll: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

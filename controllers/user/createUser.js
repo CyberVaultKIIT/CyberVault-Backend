@@ -33,7 +33,6 @@ const createUser = async (req, res) => {
     }
 
     const {
-      userId,
       name,
       email,
       password,
@@ -47,7 +46,7 @@ const createUser = async (req, res) => {
       optional,
     } = req.body
 
-    if (!userId || !name || !email || !password || !roll) {
+    if (!name || !email || !password || !roll) {
       return res.status(400).json({ message: 'Please fill all the fields' })
     }
 
@@ -62,10 +61,9 @@ const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12)
 
     const newUser = new User({
-      userId,
       name,
       email,
-      passwordHash: hashedPassword,
+      password: hashedPassword,
       phoneNumber,
       branch,
       roll,

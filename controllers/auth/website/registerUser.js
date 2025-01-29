@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
     optional,
   } = req.body
 
-  if (!userId || !name || !email || !password || !roll) {
+  if ( !name || !email || !password ) {
     return res.status(400).json({ message: 'Please fill all the fields' })
   }
 
@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
       userId,
       name,
       email,
-      passwordHash: hashedPassword,
+      password: hashedPassword,
       phoneNumber,
       branch,
       roll,
@@ -47,10 +47,12 @@ const registerUser = async (req, res) => {
       optional,
     })
     await user.save()
+    user.password= undefined;
+    user.phoneNumber= undefined;
 
     // Generate JWT
     const token = jwt.sign(
-      { userId: user.userId, email: user.email },
+      { email: user.email },
       process.env.JWT_SECRET_KEY,
       { expiresIn: '1h' },
     )
@@ -60,9 +62,9 @@ const registerUser = async (req, res) => {
     }
 
     // Set token in the cookie
-    res.cookie('authToken', token, {
+    res.cookie('Authorization', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      // secure: process.env.NODE_ENV === 'production',
       maxAge: 3600000,
     })
 

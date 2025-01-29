@@ -12,7 +12,7 @@ const catchAsync = require("../utils/catchAsyncError.js");
 // router.post('/saveResponse', registrationController.saveResponse);
 router.route("/:formId").get(catchAsync(registrationController.getForm)).post(upload.array("image"),catchAsync(registrationController.saveResponse));
 
-
+router.use(verifyToken, checkAccess('admin'))
 router.post("/createForm", createForm);
 router.delete("/deleteForm/:formId", deleteForm);
 router.put("/updateForm/:formId", updateForm);
