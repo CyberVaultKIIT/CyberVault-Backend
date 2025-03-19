@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const teamController = require('../controllers/teamController');
+const { getTeamMembers } = require('../controllers/teamController'); // Import the controller
 
-router.post('/', teamController.createTeam);
 
-// Additional routes can be added here
+router.get('/team', getTeamMembers);
 
 module.exports = router;
