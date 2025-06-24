@@ -1,6 +1,5 @@
 const Form = require('../../models/Form');
 
-// Get all active events for homepage
 const getActiveEvents = async (req, res) => {
   try {
     const events = await Form.find({ 
@@ -57,7 +56,6 @@ const getActiveEvents = async (req, res) => {
   }
 };
 
-// Get all events (including past)
 const getAllEvents = async (req, res) => {
   try {
     const events = await Form.find({}).sort({ createdAt: -1 });
@@ -89,7 +87,6 @@ const getAllEvents = async (req, res) => {
   }
 };
 
-// Get event by ID
 const getEventById = async (req, res) => {
   try {
     const { eventId } = req.params;
@@ -135,7 +132,6 @@ const getEventById = async (req, res) => {
   }
 };
 
-// Get minimal event form structure for frontend rendering
 const getEventFormStructure = async (req, res) => {
   try {
     const { eventId } = req.params;
