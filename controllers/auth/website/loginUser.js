@@ -34,11 +34,6 @@ const loginUser = async (req, res) => {
     user.password= undefined;
     user.phoneNumber= undefined;
 
-    res.cookie('Authorization', token, {
-      httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600000,
-    })
 
     return res.status(200).send({
       message: 'User Logged In Successfully',
