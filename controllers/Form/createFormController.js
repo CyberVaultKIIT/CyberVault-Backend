@@ -15,10 +15,13 @@ const createForm = async (req, res) => {
 
     const parseJSON = (data) => {
       if (!data) return null;
-
       if (typeof data === "object" && !Array.isArray(data)) return data;
 
-      if (Array.isArray(data) && data.length === 1 && typeof data[0] === "string") {
+      if (
+        Array.isArray(data) &&
+        data.length === 1 &&
+        typeof data[0] === "string"
+      ) {
         try {
           return JSON.parse(data[0]);
         } catch {
@@ -33,9 +36,10 @@ const createForm = async (req, res) => {
           return data;
         }
       }
-
       return data;
     };
+
+    console.log("Files received:", req.files.length, req.files.map(f => f.originalname));
 
     const parsedInfoObject = parseJSON(infoObject);
     const parsedControllerObject = parseJSON(controllerObject);
@@ -47,53 +51,39 @@ const createForm = async (req, res) => {
     let finalOptional = parsedOptional || {};
 
     if (isEventForm === "true" && eventInfo) {
-      const parsedEventInfo = parseJSON(eventInfo);
       finalOptional.isEventForm = true;
-      finalOptional.eventInfo = parsedEventInfo;
+      finalOptional.eventInfo = parseJSON(eventInfo) || {};
 
-      if (req.files && req.files.length > 0) {
-        if (!finalOptional.eventInfo.images) {
-          finalOptional.eventInfo.images = [];
-        }
-
-        const uploadedImages = req.files.map((file) => ({
-          url: file.path,
-          publicId: file.filename,
-          originalName: file.originalname,
+      if (req.files?.length) {
+        finalOptional.eventInfo.images = req.files.map((f) => ({
+          url: f.path,
+          publicId: f.filename,
+          originalName: f.originalname,
         }));
-
-        finalOptional.eventInfo.images = uploadedImages;
       }
-    } else if (req.files && req.files.length > 0 && parsedInfoObject) {
-      if (!parsedInfoObject.eventPoster) {
-        parsedInfoObject.eventPoster = {};
-      }
-
-      req.files.forEach((file, index) => {
-        parsedInfoObject.eventPoster[`image${index + 1}`] = file.path;
+    } else if (req.files?.length && parsedInfoObject) {
+      parsedInfoObject.eventPoster ??= {};
+      req.files.forEach((f, i) => {
+        parsedInfoObject.eventPoster[`image${i + 1}`] = f.path;
       });
     }
 
-    const newForm = new Form({
+    const savedForm = await new Form({
       infoObject: parsedInfoObject,
       controllerObject: parsedControllerObject,
       topicObject: parsedTopicObject,
       sections: parsedSections,
       requiredSection: parsedRequiredSection,
       optional: finalOptional,
-    });
+    }).save();
 
-    const savedForm = await newForm.save();
-
-    res.status(201).json({
-      message: "Form created successfully",
-      form: savedForm,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error creating form",
-      error: error.message,
-    });
+    res
+      .status(201)
+      .json({ message: "Form created successfully", form: savedForm });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error creating form", error: err.message });
   }
 };
 
