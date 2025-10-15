@@ -17,7 +17,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api', require('./routes/api'))
+connectDB();
 
 const PORT = process.env.PORT || 5000;
 
