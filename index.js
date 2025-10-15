@@ -1,26 +1,23 @@
-const express = require("express");
-const Logger = require("./utils/Logger");
-const app = express();
-const cookieParser = require("cookie-parser");
-const connectDB = require("./config/db");
-const cors = require("cors");
+const express = require('express')
+const cors = require('cors');
+const Logger = require('./utils/Logger')
+const app = express()
+const cookieParser = require('cookie-parser')
+const connectDB = require('./config/db')
 
 require("dotenv").config();
 
-// ✅ Apply CORS early
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true, // optional: only if you're using cookies
-  })
-);
+// Set CORS before all routes, only allow frontend origin with credentials
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 // Other middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// Connect to DB
-connectDB();
+app.use('/api', require('./routes/api'))
 
 const PORT = process.env.PORT || 5000;
 
