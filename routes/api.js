@@ -6,5 +6,6 @@ router.use("/form", require("./formRoutes"));
 router.use("/auth", require("./authRoutes"));
 router.use("/admin", require("./userRoutes"));
 router.use("/event", require("./eventRoutes"));
+router.use("/teams", require("./teamRoutes"))
 
 module.exports = router;
