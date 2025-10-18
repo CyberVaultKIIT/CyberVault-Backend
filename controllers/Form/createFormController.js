@@ -1,4 +1,5 @@
-const Form = require("../../models/Form");
+const Form = require("../../models/Form.js");
+const Event = require("../../models/Event.js")
 
 const createForm = async (req, res) => {
   try {
@@ -39,7 +40,7 @@ const createForm = async (req, res) => {
       return data;
     };
 
-    console.log("Files received:", req.files.length, req.files.map(f => f.originalname));
+    // console.log("Files received:", req.files.length, req.files.map(f => f.originalname));
 
     const parsedInfoObject = parseJSON(infoObject);
     const parsedControllerObject = parseJSON(controllerObject);
@@ -50,9 +51,11 @@ const createForm = async (req, res) => {
 
     let finalOptional = parsedOptional || {};
 
+
     if (isEventForm === "true" && eventInfo) {
       finalOptional.isEventForm = true;
       finalOptional.eventInfo = parseJSON(eventInfo) || {};
+
 
       if (req.files?.length) {
         finalOptional.eventInfo.images = req.files.map((f) => ({
@@ -77,14 +80,49 @@ const createForm = async (req, res) => {
       optional: finalOptional,
     }).save();
 
-    res
+    console.log("form id: ",savedForm._id);
+
+     if (finalOptional?.isEventForm && finalOptional?.eventInfo) {
+      const eventInfo = finalOptional.eventInfo;
+
+      const newEvent = await new Event({
+      title: parsedInfoObject?.formTitle || "Untitled Event",
+      description: parsedInfoObject?.description || "",
+      topic: parsedTopicObject?.topic || "",
+      poster: parsedInfoObject?.eventPoster || {},
+      isLive: parsedControllerObject?.isLive || false,
+      isPast: parsedControllerObject?.isPast || false,
+      formId: savedForm._id,
+      eventInfo: {
+        title: parsedInfoObject?.formTitle || "Untitled Event",
+        date: eventInfo.date ? new Date(eventInfo.date) : null,
+        location: eventInfo.location || "",
+        registrationDeadline: eventInfo.registrationDeadline
+          ? new Date(eventInfo.registrationDeadline)
+          : null,
+        ticketPrice: eventInfo.ticketPrice || 0,
+        venue: eventInfo.venue || "",
+        images: eventInfo.images?.map((img) => img.url) || [],
+      },
+    }).save();
+
+      if(newEvent && savedForm){
+        return res
+        .status(201)
+        .json({message: "Form and event craeted and saved successfully", form: savedForm, event: newEvent});
+      }
+    }
+    else if(savedForm){
+        res
       .status(201)
       .json({ message: "Form created successfully", form: savedForm });
-  } catch (err) {
+    }
+
+   } catch (err) {
     res
       .status(500)
       .json({ message: "Error creating form", error: err.message });
   }
 };
 
-module.exports = { createForm };
+module.exports = { createForm }
