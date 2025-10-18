@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router(); // ✅ correct
+
+// import controller functions directly
+const { getActiveEvents, getAllEvents, getEventById } = require('../controllers/Event/eventController');
+
+// define routes
+router.get("/activeEvents", getActiveEvents);
+router.get("/allEvents", getAllEvents);
+router.get("/name/:id", getEventById);
+
+module.exports = router;

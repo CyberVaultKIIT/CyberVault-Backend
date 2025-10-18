@@ -5,5 +5,6 @@ const router = express.Router();
 router.use("/form", require("./formRoutes"));
 router.use("/auth", require("./authRoutes"));
 router.use("/admin", require("./userRoutes"));
+router.use("/event", require("./eventRoutes"));
 
 module.exports = router;
