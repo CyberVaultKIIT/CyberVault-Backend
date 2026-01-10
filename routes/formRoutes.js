@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-
 const registrationController = require("../controllers/registrationController");
 
 
@@ -16,7 +15,7 @@ const upload = multer({ storage });
 const catchAsync = require("../utils/catchAsyncError.js");
 
 const { verifyToken } = require("../middleware/verifyToken.js");
-const{ checkAccess } = require("../middleware/checkAccess.js")
+const { checkAccess } = require("../middleware/checkAccess.js")
 
 const folder = (name) => (req, res, next) => {
   req.folder = name;
@@ -29,17 +28,16 @@ const folder = (name) => (req, res, next) => {
 // router.get("/events/:eventId/structure", eventController.getEventFormStructure);
 
 // router.post('/saveResponse', registrationController.saveResponse);
-router
-  .route("/formSubmissions/:formId")
-  .get(catchAsync(registrationController.getForm))
-  .post(
-    folder("submissions"),
-    upload.array("image", 10),
-    catchAsync(registrationController.saveResponse)
-  );
+// router
+//   .route("/formSubmissions/:formId")
+//   .get(catchAsync(registrationController.getForm))
+//   .post(
+//     registrationController.saveResponse
+//   );
+router.post('/formSubmission/:id', registrationController.saveResponse);
 
 router.use(verifyToken, checkAccess("admin"));
-router.post("/createForm",createForm);
+router.post("/createForm", createForm);
 router.delete("/deleteForm/:formId", deleteForm);
 router.put("/updateForm/:formId", updateForm);
 // Additional routes can be added here
