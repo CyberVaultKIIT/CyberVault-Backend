@@ -2,9 +2,9 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
-const verifyToken= async(req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization || req.cookie.authorization
+    const authHeader = req.headers?.authorization || req.cookie?.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res
@@ -43,4 +43,4 @@ const verifyToken= async(req, res, next) => {
       .json({ message: 'Invalid or expired token.', error: error.message })
   }
 }
-module.exports = {verifyToken};
+module.exports = { verifyToken };
