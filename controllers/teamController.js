@@ -16,7 +16,6 @@ exports.getTeamMember = async (req, res) => {
   try {
     // Fetch all users where isActive is true
     const users = await User.find({ status: "active", team: {"$exists": true, "$nin":[null, ""]}});
-    console.log("Active users:", users);
 
     // If no users found, return a 404 response
     if (!users || users.length === 0) {
